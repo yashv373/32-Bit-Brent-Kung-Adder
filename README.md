@@ -71,3 +71,9 @@ All test cases confirm the **accuracy and efficiency** of the Brent-Kung adder.
 ## **Contributors**  
 👨‍💻 **Yashvardhan Singh**  
 
+## **Outputs**
+![Screenshot 2025-02-23 183249](![Screenshot 2025-02-23 183335](https://github.com/user-attachments/assets/a929f56f-8f59-497a-a311-1442400d5118)
+![Screenshot 2025-02-23 183335](https://github.com/user-attachments/assets/2d7e3328-1b45-44a8-a21f-118686da5856)
+
+
+
