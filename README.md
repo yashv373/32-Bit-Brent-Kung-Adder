@@ -1,82 +1,57 @@
-# **32-bit Brent-Kung Adder - Verilog Implementation**
+# Brent-Kung 32-Bit Adder
+Project by Yashvardhan Singh - 4th Semester Student - Electronics Engg. (VLSI Design & Technology) Undergraduate Student - Dept. of ECE, MIT, Manipal.
+## Overview
+This repository contains the implementation and analysis of a **32-bit Brent-Kung Adder (BKA)**, a parallel-prefix adder architecture known for its efficiency in reducing delay while maintaining a balanced trade-off in power and area. The project includes **Verilog** implementations, testbenches, synthesis reports, and Tcl scripts for simulation and synthesis.
+![brentkung_synthesis](https://github.com/user-attachments/assets/e9872ac6-638b-4495-887a-b474d532b2e0)
+## Features
+- **Low latency:** Optimized critical path delay of **3.78 ns**.
+- **Efficient power consumption:** Total power consumption of **43.32 µW**.
+- **Compact area utilization:** Total cell area of **1223.91 µm²**.
+- **Compared architectures:** Benchmarked against RCA, CLA, KSA, and HCA.
+- **Synthesized using industry-standard tools**.
 
-## **Overview**  
-This project implements a **32-bit Brent-Kung adder** using Verilog HDL. The Brent-Kung adder is a **parallel prefix adder** that optimizes carry propagation with a tree-like structure, reducing computational delay while minimizing wiring complexity. It strikes a balance between speed and hardware efficiency, making it ideal for **high-performance arithmetic operations** in modern digital systems.  
-![brentkung_synthesis](https://github.com/user-attachments/assets/d955bb15-7a77-4fd2-b4fc-202ba545f86d)
+## Project Files
 
-## **Features**  
-✅ **32-bit Addition** with carry-in support  
-✅ **Logarithmic Delay** for efficient carry propagation  
-✅ **Modular Design**, including black cells, gray cells, and buffers  
-✅ **Comprehensive Testbench** to verify correctness and performance  
-✅ **Simulated in Icarus Verilog & Cadence NCLaunch**  
+| File Name                 | Description |
+|---------------------------|-------------|
+| `brentkung32.v`           | Verilog implementation of the 32-bit Brent-Kung Adder |
+| `brentkung32_tb.v`        | Testbench for functional verification |
+| `bka.tcl`                 | Tcl script for synthesis |
+| `bka_area.rep`            | Area report from synthesis |
+| `bka_pwr.rep`             | Power report from synthesis |
+| `bka_timing.rep`          | Timing analysis report |
+| `brentkung_synthesis.png` | Schematic representation of the synthesized design |
+| `bkanclaunch.png`         | Simulation setup screenshot |
+| `Brent Kung 32Bit Project Documentation.pdf` | Detailed project report |
 
-## **File Structure**  
+## Performance Comparison
 
-📂 **Verilog Modules:**  
-- `brent_kung_adder.v` – Main module implementing the 32-bit Brent-Kung adder  
-- `black_cell.v` – Black cell module for carry computation  
-- `gray_cell.v` – Gray cell module for carry computation  
-- `white_cell.v` – Buffer module for intermediate storage  
-- `preprocess.v` – Generates propagate and generate signals  
-- `postprocess.v` – Computes final sum  
-Note: all of them have been merged into 1 file, in the brentkung32.v file
+| Adder Type      | Delay (ns) | Bit Width | Technology Node |
+|----------------|------------|------------|-----------------|
+| **Brent-Kung (This Project)** | **3.78**  | 32-bit  | Not specified |
+| Ripple Carry (RCA) | 38.66  | 32-bit  | 180nm |
+| Carry Look-Ahead (CLA) | 9.33  | 32-bit  | 45nm |
+| Kogge-Stone (KSA) | 6.7  | 16-bit  | 90nm |
+| Modified KSA | 3.5  | 32-bit  | 45nm |
+| Han-Carlson (HCA) | 3.129  | 16-bit  | 65nm |
+| Pass Transistor Full Adder | 7.04  | 32-bit  | 180nm |
 
-🛠 **Testbench & Simulation:**  
-- `tb_brent_kung_adder.v` – Testbench for functional verification  
-- `waveform.vcd` – Output waveforms from simulations  
+## How to Run
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/YOUR_USERNAME/BrentKungAdder.git
+   cd BrentKungAdder
+   ```
+2. Run the testbench in your preferred **Verilog simulator**:
+   ```sh
+   iverilog -o brentkung_test brentkung32.v brentkung32_tb.v
+   vvp brentkung_test
+   ```
+3. View the synthesis reports and analyze performance.
 
-📄 **Documentation:**  
-- `Brent_Kung_Adder_Report.pdf` – Detailed design documentation  
+## Conclusion
+The **Brent-Kung Adder** demonstrates a **significant reduction in delay** while keeping power and area within reasonable limits. This project validates its suitability for high-speed arithmetic operations in **modern VLSI designs**.
 
-## **Usage**  
+---
 
-### **1. Clone the Repository**  
-```sh
-git clone https://github.com/your-repo/brent-kung-adder.git
-cd brent-kung-adder
-```
-
-### **2. Run Simulation**  
-#### **Using Icarus Verilog**  
-```sh
-iverilog -o adder brent_kung_adder.v tb_brent_kung_adder.v
-vvp adder
-gtkwave waveform.vcd  # View waveforms
-```
-#### **Using ModelSim or Cadence NCLaunch**  
-- Load the Verilog files into the simulator  
-- Compile and run `tb_brent_kung_adder.v`  
-- Observe the output waveforms  
-
-## **Simulation Results**  
-The adder has been tested under various conditions, including:  
-✔ **Basic Addition** – Ensures correctness for simple sums  
-✔ **Overflow Cases** – Verifies proper handling of carry-out  
-✔ **Carry Propagation** – Checks correct carry computations  
-✔ **Zero Addition** – Tests when inputs are zero  
-✔ **Random Input Addition** – Ensures robustness  
-
-All test cases confirm the **accuracy and efficiency** of the Brent-Kung adder.  
-
-## **Performance Analysis**  
-🔹 **Speed:** Faster than ripple-carry adders due to logarithmic delay  
-🔹 **Hardware Efficiency:** Requires fewer wiring connections than Kogge-Stone  
-🔹 **Scalability:** Can be extended for higher bit-widths  
-
-## **Future Work**  
-🚀 Optimize for lower power consumption  
-🚀 Compare with Kogge-Stone and Han-Carlson adders  
-🚀 Extend to a 64-bit or 128-bit version  
-
-## **Contributors**  
-👨‍💻 **Yashvardhan Singh**  
-
-## **Outputs**
-![Screenshot 2025-02-23 183249](https://github.com/user-attachments/assets/e1157cca-9b06-4e92-8b94-17b96a2a1a8e)
-
-![Screenshot 2025-02-23 183335](https://github.com/user-attachments/assets/2d7e3328-1b45-44a8-a21f-118686da5856)
-![bkanclaunch](https://github.com/user-attachments/assets/bc51d9b5-e8f7-4ac3-be37-8771c2dd4ce7)
-
-
-
+📌 **For more details, check the project documentation!**
