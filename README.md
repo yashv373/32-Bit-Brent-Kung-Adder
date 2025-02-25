@@ -2,7 +2,9 @@
 Project by Yashvardhan Singh - 4th Semester Student - Electronics Engg. (VLSI Design & Technology) Undergraduate Student - Dept. of ECE, MIT, Manipal.
 ## Overview
 This repository contains the implementation and analysis of a **32-bit Brent-Kung Adder (BKA)**, a parallel-prefix adder architecture known for its efficiency in reducing delay while maintaining a balanced trade-off in power and area. The project includes **Verilog** implementations, testbenches, synthesis reports, and Tcl scripts for simulation and synthesis.
-![brentkung_synthesis](https://github.com/user-attachments/assets/e9872ac6-638b-4495-887a-b474d532b2e0)
+
+![image](https://github.com/user-attachments/assets/e352f450-fa90-407f-8094-3db4f496bd20)
+
 ## Features
 - **Low latency:** Optimized critical path delay of **3.78 ns**.
 - **Efficient power consumption:** Total power consumption of **43.32 µW**.
