@@ -2,6 +2,7 @@
 
 ## **Overview**  
 This project implements a **32-bit Brent-Kung adder** using Verilog HDL. The Brent-Kung adder is a **parallel prefix adder** that optimizes carry propagation with a tree-like structure, reducing computational delay while minimizing wiring complexity. It strikes a balance between speed and hardware efficiency, making it ideal for **high-performance arithmetic operations** in modern digital systems.  
+![brentkung_synthesis](https://github.com/user-attachments/assets/d955bb15-7a77-4fd2-b4fc-202ba545f86d)
 
 ## **Features**  
 ✅ **32-bit Addition** with carry-in support  
@@ -75,6 +76,7 @@ All test cases confirm the **accuracy and efficiency** of the Brent-Kung adder.
 ![Screenshot 2025-02-23 183249](https://github.com/user-attachments/assets/e1157cca-9b06-4e92-8b94-17b96a2a1a8e)
 
 ![Screenshot 2025-02-23 183335](https://github.com/user-attachments/assets/2d7e3328-1b45-44a8-a21f-118686da5856)
+![bkanclaunch](https://github.com/user-attachments/assets/bc51d9b5-e8f7-4ac3-be37-8771c2dd4ce7)
 
 
 
