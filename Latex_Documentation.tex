@@ -1,0 +1,650 @@
+\documentclass{IEEEtran}
+\usepackage{amsmath}
+\usepackage{amssymb}  % Additional math symbols
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{xspace}   % Proper spacing after macros
+\usepackage{array}    % Better table formatting (optional)
+\title{A 32-Bit Brent-Kung Parallel Prefix Adder: Design and Simulation using Cadence Design Suite}
+
+\author{\IEEEauthorblockN{\textbf{Yashvardhan Singh }(230959136), \textbf{Avyutkh Dinesh} (230959138)}\\
+\IEEEauthorblockA{Department of Electronics and Communication Engineering, MIT, Manipal \\ Branch: \textbf{\textit{Electronics Engineering (VLSI Design and Technology}}) \\\textbf{\textit{VLSI DESIGN LAB - MINIPROJECT}} \\
+Email: yashvardhan1.mitmpl2023@learner.manipal.edu}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Adders are fundamental components in digital circuits, crucial for arithmetic operations in computing systems. This project focuses on the design and simulation of a 32-bit Brent-Kung parallel prefix adder, known for efficient carry propagation and logarithmic delay. Compared to traditional adders such as ripple-carry and carry-lookahead adders, the Brent-Kung architecture minimizes computational delay and fan-out, making it suitable for high-speed digital applications. The design is implemented using Verilog HDL and simulated using Cadence Design Suite, evaluating performance in terms of speed, scalability, and functional correctness. The results demonstrate the Brent-Kung adder's potential to enhance computational efficiency in modern digital systems.
+\\ Keywords: Brent-Kung Adder; Parallel Prefix Adder; Verilog; Digital Circuits
+\end{abstract}
+
+\section{Introduction}
+Adders are fundamental combinational logic circuits used as building blocks for arithmetic operations in digital computing systems. They are combinational logic circuits that perform binary addition, producing a sum and a carry output based on the inputs provided. Over time, various types of adders have been developed to address the growing demands for speed, efficiency, and scalability in digital systems. Several prominent adder architectures are discussed below.
+
+\subsection{Half Adder}
+The half adder is the simplest form of an adder, capable of adding two single-bit binary numbers. It produces two outputs: the sum and the carry. While it is a critical building block for more complex adders, its limitation lies in its inability to account for carry inputs from previous stages.\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{HA-Logical-Diagram.jpg}
+    \caption{Half Adder Logic Diagram}
+    \label{fig:ha-diagram}
+\end{figure}
+
+\subsection{Full Adder}
+To overcome the limitations of the half adder, the full adder was introduced. It can add three 1-bit binary numbers, two operands and a carry input, producing a sum and a carry output. Full adders are often cascaded to form multi-bit adders for larger binary numbers.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Full-Adder-Logical-Diagram.png}
+    \caption{Full Adder Logic Diagram}
+    \label{fig:enter-label}
+\end{figure}
+
+
+\subsection{Ripple Carry Adders}
+When multiple full adders are connected in parallel, they form a binary parallel adder capable of adding multi-bit binary numbers simultaneously. However, this design introduces a significant limitation: carry propagation delay. In ripple-carry adders, each stage must wait for the carry from the previous stage, resulting in slower performance as the number of bits increases.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{RCA.png}
+    \caption{Ripple  Carry Adder Logic Diagram}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{Carry Lookahead Adders}
+To address the delay caused by ripple-carry propagation, the carry lookahead adder was developed. This design uses additional logic to compute carries in advance, significantly reducing delay and improving speed. Despite its advantages, carry lookahead adders require more complex hardware, which can become inefficient for very large bit-widths.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{CLA.png}
+    \caption{Carry Look Ahead Adder}
+    \label{fig:enter-label}
+\end{figure}
+\subsection{The Need for faster Adders}
+As digital systems evolved, so did the demand for faster and more efficient arithmetic operations. Applications such as high-speed processors, signal processing units, and real-time systems required adders with minimal delay and optimized resource usage. While carry lookahead adders improved performance significantly, their complexity and fan-out issues posed challenges for scalability.
+
+\subsection{Brent-Kung Adder}
+The 32-bit Brent-Kung Adder is a parallel prefix adder designed with a logarithmic-depth tree structure, enabling faster carry computation compared to ripple-carry adders. This design reduces computational delay and fan-out compared to traditional adders like ripple-carry or carry lookahead adders. By balancing speed and hardware complexity, Brent-Kung adders are well-suited for high-speed applications requiring efficient arithmetic operations.
+
+ In this project, we focus on designing and simulating a 32-bit Brent-Kung adder using Verilog HDL and Cadence NCLaunch to demonstrate its advantages in terms of speed, scalability, and efficiency.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{BKAintro.png}
+    \caption{Brent Kung Adder (16 bit)}
+    \label{fig:enter-label}
+\end{figure}
+
+\section{Brief Description - Brent-Kung Adder}
+32-bit Brent-Kung Adder is a logarithmic adder which does the computation of the carry faster than ripple carry adder because of the way it is designed in a tree like fashion to compute carries at each stage. 
+
+Designed by Richard P. Brent and H.T. Kung in 1982, the Brent-Kung Adder (BKA) is a well-known parallel prefix adder that provides an optimal number of stages from input to all outputs while minimizing wiring complexity. 
+
+BKA occupies less area than other adders, such as the Sparse Kogge Stone Adder (SKA), Kogge-Stone adder (KSA), and Spanning tree adder. The BKA also uses a limited number of propagating and generating cells, further contributing to its efficiency.
+
+We have also made use of Logisim Evolution Software to make schematic images for better visual documentation of all sub-circuits present in the Brent Kung Adder.
+
+\subsection{Stages of Brent-Kung Adders}
+\begin{itemize}
+    \item \textbf{Pre-processing Stage:} Computes Generate (G) and Propagate (P) signals:\begin{equation}
+        G_i = A_i \cdot B_i, \quad P_i = A_i \oplus B_i
+    \end{equation}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{preprocess.png}
+    \caption{Pre Processing Logic Circuit}
+    \label{fig:}
+\end{figure}
+    
+    \item \textbf{Prefix Carry Tree Stage:} Uses Black and Gray cells to compute carry signals:\begin{equation}
+        G_{i:j} = G_{i:k} + P_{i:k} G_{k-1:j}, \quad P_{i:j} = P_{i:k} P_{k-1:j}
+    \end{equation}
+    \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.5\linewidth]{blackcell.png}
+            \caption{Black Cell}
+            \label{fig:enter-label}
+        \end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{image.png}
+    \caption{Gray Cell}
+    \label{fig:enter-label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{whitecell.png}
+    \caption{White Cell}
+    \label{fig:enter-label}
+\end{figure}
+    \item \textbf{Post-processing Stage:} Generates sum bits using computed carry signals.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{postprocessing.png}
+    \caption{Post Processing Cell}
+    \label{fig:enter-label}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{stageflow.png}
+    \caption{Flow of data within BK Adder}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{Comparing the Brent-Kung adder with other adders}
+\begin{itemize}
+\item \textbf{Ripple-Carry Adder:} High delay due to sequential carry propagation.
+\item \textbf{Carry-Lookahead Adder:} Faster but more complex in terms of hardware.
+\item \textbf{Brent-Kung Adder:} Balances speed and hardware complexity, making it ideal for high-speed applications.
+\item \textit{To understand gate-level operation clearly, we designed a smaller-scale 4-bit Brent-Kung adder using Logisim Evolution software, which aided in verifying design accuracy.}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{bka4bit.png}
+    \caption{Functional Analysis of 4-bit BKA in Logisim}
+    \label{fig:enter-label}
+\end{figure}
+\end{itemize}
+
+
+
+\section{Circuit Design}
+
+\subsection{Schematic Design}
+The BKA consists of three main sub-circuits: Black cell, Gray cell, and Buffer. These are modeled separately in Verilog HDL and integrated into the main module.
+
+\subsection{Verilog Implementation}
+
+\subsubsection{Black Cell Module (fig. 7)}
+\begin{lstlisting}[language=Verilog]
+//Black Cell Module (fig. 7)
+module blackcell(input gik, pik, gkj, pkj, 
+output gij, pij);
+wire a;
+assign a = pik & gkj;
+assign gij = gkj + a;
+assign pij = pik & pkj;
+endmodule
+\end{lstlisting}
+
+\subsubsection{Gray Cell Module (fig. 8)}
+\begin{lstlisting}[language=Verilog]
+//Gray Cell Module (fig. 8)
+module graycell(input gi, pi, gi1, output c);
+wire b;
+assign b = pi & gi1;
+assign c = gi | b;
+endmodule
+\end{lstlisting}
+
+\subsubsection{Pre-Processing Module (fig. 6)}
+\begin{lstlisting}[language=Verilog]
+//Pre-Processing Module (fig. 6)
+module preprocess(input a, b, output g, p);
+assign g = a & b;
+assign p = a ^ b;
+endmodule
+\end{lstlisting}
+
+\subsubsection{Post-Processing Module (fig. 10)}
+\begin{lstlisting}[language=Verilog]
+//Post-Processing Module (fig. 10)
+module postprocess(input c, p, output s);
+wire f;
+assign f = c ^ p;
+buf b1 #10 (s, f);
+endmodule
+\end{lstlisting}
+
+\subsubsection{Brent-Kung Adder Module}
+\begin{lstlisting}[language=Verilog]
+// MAIN ADDER MODULE
+module brent_kung_adder(
+    input [31:0] A, B,
+    input Ci,
+    output [31:0] S,
+    output Co
+);
+    wire [31:0] P1, G1;  // First order propagate and generate
+    wire [32:0] C;       // Carry signals, including C[0] for Ci
+    wire [15:0] G2, P2;
+    wire [7:0] G3, P3;
+    wire [3:0] G4, P4;
+    wire [1:0] G5, P5;
+    wire G6, P6;
+
+    // Pre-processing (Generate & Propagate)
+    genvar i;
+    generate
+        for (i = 0; i < 32; i = i + 1) begin: 
+    preprocessing_stage    
+    preprocess pp (A[i], B[i], G1[i], P1[i]);
+     end
+    endgenerate
+
+    // Prefix tree for carry computation
+    generate
+    for (i = 0; i < 16; i = i + 1) begin: 
+    second_stage
+    blackcell bc (G1[2*i+1], P1[2*i+1],
+    G1[2*i], P1[2*i], G2[i], P2[i]);
+    end
+    for (i = 0; i < 8; i = i + 1) begin:
+    third_stage
+    blackcell bc (G2[2*i+1], P2[2*i+1],
+    G2[2*i], P2[2*i], G3[i], P3[i]);
+    end
+    for (i = 0; i < 4; i = i + 1) begin:
+    fourth_stage
+    blackcell bc (G3[2*i+1], P3[2*i+1], 
+    G3[2*i], P3[2*i], G4[i], P4[i]);
+    end
+    for (i = 0; i < 2; i = i + 1) begin:
+    fifth_stage
+    blackcell bc (G4[2*i+1], P4[2*i+1],
+    G4[2*i], P4[2*i], G5[i], P5[i]);
+    end
+    endgenerate
+
+    // Last level black cell
+    blackcell bc_last (G5[1], P5[1],
+    G5[0], P5[0], G6, P6);
+
+    // Compute carries
+    assign C[0] = Ci;  
+    assign C[1] = 
+    G1[0] | (P1[0] & C[0]);
+    assign C[2] = 
+    G2[0] | (P2[0] & C[0]);
+    assign C[4] = 
+    G3[0] | (P3[0] & C[0]);
+    assign C[8] =
+    G4[0] | (P4[0] & C[0]);
+    assign C[16] = 
+    G5[0] | (P5[0] & C[0]);
+    assign C[32] = 
+    G6 | (P6 & C[0]);
+
+    generate
+    for (i = 3; i < 32; i = i + 1) 
+    begin: carry_stage
+    if (i != 4 && i != 8 && i != 16)
+    begin
+    graycell gc (G1[i-1], P1[i-1],
+    C[i-1], C[i]);
+    end
+    end
+    endgenerate
+
+    // Post-processing (Sum computation)
+    generate
+    for (i = 0; i < 32; i = i + 1) 
+    begin: postprocessing_stage
+    postprocess pp (C[i], P1[i], S[i]);
+    end
+    endgenerate
+
+    assign Co = C[32];
+
+endmodule
+\end{lstlisting}
+\subsection{Verilog Implementation - Testbench}
+\begin{lstlisting}[language=Verilog]
+`timescale 1ns / 1ps
+
+module tb_brent_kung_adder;
+    reg [31:0] A, B;
+    reg Ci;
+    wire [31:0] S;
+    wire Co;
+
+    // Instantiate Brent-Kung Adder
+    brent_kung_adder uut (
+    .A(A), .B(B), .Ci(Ci),
+    .S(S), .Co(Co)
+    );
+
+    initial begin
+    // EPWave dump setup
+    $dumpfile("waveform.vcd");  
+    $dumpvars(0, tb_brent_kung_adder);
+
+    // Initialize inputs
+    A = 0; B = 0; Ci = 0;
+    #10; // Wait for 10 ns 
+    before starting tests
+
+    // Test Case 1: Basic Addition
+    A = 32'b0000000000000000000
+    0000000000001; // A = 1
+    B = 32'b00000000000000000
+    000000000000001; // B = 1
+    Ci = 0;  
+    #20; // Increased delay
+
+    // Test Case 2: Adding 
+    large numbers (Overflow case)
+    A = 32'b11111111111111111
+    111111111111111; // A = 4294967295
+    B = 32'b00000000000000000
+    000000000000001; // B = 1
+    Ci = 0;
+    #20;
+
+    // Test Case 3: Carry Propagation
+    (Adding two large positive numbers)
+    A = 32'b1000000000000000
+    0000000000000000; // A = 2147483648
+    B = 32'b100000000000000
+    00000000000000000; // B = 2147483648
+    Ci = 0;
+    #20;
+
+    // Test Case 4: Zero Addition
+    A = 32'b0000000000000000
+    0000000000000000; // A = 0
+    B = 32'b000000000000000
+    00000000000000000; // B = 0
+    Ci = 0;
+    #20;
+
+    // Test Case 5: Random Addition
+    A = 32'b000000000000000
+    00000000000001010; // A = 10
+    B = 32'b000000000000000
+    00000000000010100; // B = 20
+    Ci = 0;
+    #20;
+
+    // Test Case 6: Carry-in Effect
+    A = 32'b00000000000000000
+    000000000001111; // A = 15
+    B = 32'b00000000000000000
+    000000000000001; // B = 1
+    Ci = 1;
+    #20;
+    // Finish Simulation
+    $finish;
+    end
+    
+    initial begin
+    $monitor("Time=%t|A=%b|B=%b|
+    Cin=%b|S=%b|Cout=%b",
+    $time, A, B, Ci, S, Co);
+    end
+endmodule\end{lstlisting}
+
+\section{Simulation Results and Analysis}
+\subsection{Initial EDA Playground Simulation}
+Initial testing and verification were done on EDAplayground using IcarusVerilog 12.0 with -Wall -g2012. Outputs were observed via [dollar]monitor logs and EPWave waveforms.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{EDAPsim.png}
+    \caption{EDA Playground Simulator}
+    \label{fig:enter-label}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{epwave.png}
+    \caption{EDA Playground Simulation - EPWave}
+    \label{fig:enter-label}
+\end{figure}
+\subsection{Initial EDA Playground Simulation: Detailed Analysis}
+
+\noindent At \textbf{0 ps} (Initial state):  
+\begin{itemize}
+    \item \( A = 00000000000000000000000000000000 \) (0 in decimal)
+    \item \( B = 00000000000000000000000000000000 \) (0 in decimal)
+    \item \( Cin = 0 \)
+    \item \( S = 00000000000000000000000000000000 \)
+    \item \( Cout = 0 \)
+\end{itemize}
+This result is correct. Adding 0 and 0 without carry-in results in 0 with no carry-out.
+
+\vspace{0.5em}
+\noindent At \textbf{10,000 ps}:  
+\begin{itemize}
+    \item \( A = 00000000000000000000000000000001 \) (1 in decimal)
+    \item \( B = 00000000000000000000000000000001 \) (1 in decimal)
+    \item \( Cin = 0 \)
+    \item \( S = 00000000000000000000000000000010 \) (2 in decimal)
+    \item \( Cout = 0 \)
+\end{itemize}
+This result is correct. Adding 1 and 1 results in 2, which is correctly represented in binary.
+
+\vspace{0.5em}
+\noindent At \textbf{30,000 ps}:  
+\begin{itemize}
+    \item \( A = 11111111111111111111111111111111 \) (4,294,967,295 in decimal)
+    \item \( B = 00000000000000000000000000000001 \) (1 in decimal)
+    \item \( Cin = 0 \)
+    \item \( S = 00000000000000000000000000000000 \)
+    \item \( Cout = 1 \)
+\end{itemize}
+This result is correct. Adding 4,294,967,295 and 1 in a 32-bit system causes an overflow, resulting in all zeros with a carry-out of 1.
+
+\vspace{0.5em}
+\noindent At \textbf{50,000 ps}:  
+\begin{itemize}
+    \item \( A = 10000000000000000000000000000000 \) (2,147,483,648 in decimal)
+    \item \( B = 10000000000000000000000000000000 \) (2,147,483,648 in decimal)
+    \item \( Cin = 0 \)
+    \item \( S = 00000000000000000000000000000000 \)
+    \item \( Cout = 1 \)
+\end{itemize}
+This result is correct. Adding two numbers, each 2,147,483,648, in a 32-bit system causes an overflow. The sum (4,294,967,296) exceeds the maximum representable value, resulting in all zeros with a carry-out of 1.
+
+\vspace{0.5em}
+\noindent At \textbf{70,000 ps}:  
+\begin{itemize}
+    \item \( A = 00000000000000000000000000000000 \) (0 in decimal)
+    \item \( B = 00000000000000000000000000000000 \) (0 in decimal)
+    \item \( Cin = 0 \)
+    \item \( S = 00000000000000000000000000000000 \)
+    \item \( Cout = 0 \)
+\end{itemize}
+This result is correct. Adding 0 and 0 without carry-in results in 0 with no carry-out.
+
+\vspace{0.5em}
+\noindent At \textbf{90,000 ps}:  
+\begin{itemize}
+    \item \( A = 00000000000000000000000000001010 \) (10 in decimal)
+    \item \( B = 00000000000000000000000000010100 \) (20 in decimal)
+    \item \( Cin = 0 \)
+    \item \( S = 00000000000000000000000000011110 \) (30 in decimal)
+    \item \( Cout = 0 \)
+\end{itemize}
+This result is correct. Adding 10 and 20 results in 30, which is correctly represented in binary form.
+
+\vspace{0.5em}
+\noindent At \textbf{110,000 ps}:  
+\begin{itemize}
+    \item \( A = 00000000000000000000000000001111 \) (15 in decimal)
+    \item \( B = 00000000000000000000000000000001 \) (1 in decimal)
+    \item \( Cin = 1 \)
+    \item \( S = 00000000000000000000000000010001 \) (17 in decimal)
+    \item \( Cout = 0 \)
+\end{itemize}
+This result is correct. Adding 15 and 1, plus a carry-in of 1, results in 17, which is correctly represented in binary.
+
+\vspace{0.5em}
+\noindent All test cases demonstrate that the Brent-Kung adder is functioning correctly, handling various scenarios, including basic addition, overflow conditions, and carry-in situations.
+
+
+\subsection{Cadence NC-Launch Simulation}
+Testing and verification was also done on Cadence NCLaunch software, which gave the same results as the EDA Playground simulation. This adds to the accuracy of our previous results, which was discussed in great detail in the previous section.
+
+This completes the Functional Analysis of our design; in the following section we will explore performance in terms of parameters like power, area, and time.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{cadnclaunch.png}
+    \caption{Cadence NC-Launch Simulation}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{Synthesis using Cadence Genus}
+PAT refers to Power, Area and Time analysis which was done with the help of the Genus 21.14 tool after synthesizing the design. The Verilog code from previous sections was synthesized using Cadence Genus 21.14 tool. Due to the combinational nature of our design, unconstrained timing conditions were invoked via an SDC file for accurate timing analysis.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{synthesis.png}
+    \caption{Brent Kung Adder Design Synthesis using Cadence Genus}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{\textbf{Power Report}}
+Total power consumption of 43.32 µW.
+The obtained Power Report is as follows:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{powerBka.png}
+    \caption{Power Report}
+    \label{fig:enter-label}
+\end{figure}
+\subsubsection{\textbf{Area Report}}
+Total cell area of 1223.91 µm².
+The obtained Area Report is as follows:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{AreaBKA.png}
+    \caption{Area Report}
+    \label{fig:enter-label}
+\end{figure}
+\subsubsection{\textbf{Timing Report}}
+The critical path delay is of 3.78 ns.
+The obtained Timing Report is as follows:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{TimeBKA.png}
+    \caption{Timing Report}
+    \label{fig:enter-label}
+\end{figure}
+\subsection{Compiled Data of PAT Reports:
+}
+Here is the data we got:\\
+Total Power Consumption: \textbf{43.32 µW}\\
+Total Cell Area: \textbf{1223.91 µm²}\\
+Critical Path Delay: \textbf{3.78 ns/3780ps}
+
+
+\subsection{Comparison with some existing designs:}
+The evaluation of various adder architectures based on Power, Area, and Timing (PAT) parameters demonstrates that the Brent-Kung adder synthesized in this project achieves a critical path delay of 3.78 ns, positioning it among the fastest adder designs compared to conventional approaches. While not the absolute fastest, it significantly outperforms traditional adders like Ripple Carry Adders (RCA), which exhibit excessive delay (38.66 ns) due to their linear carry propagation.
+Compared to the Kogge-Stone (KSA) and Modified KSA adders, which achieve delays of 6.7 ns (16-bit) and 3.5 ns (32-bit) respectively, our Brent-Kung adder maintains competitive timing with a more area-efficient structure. The Han-Carlson adder, which is another parallel-prefix adder, achieves a slightly lower delay (3.129 ns for 16-bit), but its area and power overhead may limit scalability.
+In terms of total power consumption, our design maintains a reasonable 43.32 µW, making it a balanced choice when considering both performance and energy efficiency. The total cell area of 1223.91 µm² also confirms that Brent-Kung offers a good trade-off between complexity and speed, unlike the Kogge-Stone adder, which, while fast, suffers from high area and power requirements due to its dense interconnect structure.
+Thus, the results validate the Brent-Kung adder as a super-fast, efficient adder architecture, particularly suitable for high-speed applications where delay optimization is critical while keeping area constraints in check. The structured prefix computation reduces carry propagation time without introducing excessive power or area overhead, making it a viable choice for VLSI-based arithmetic units, DSP processors, and energy-efficient computing architectures.\\
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{1.2} % Adjust row height for readability
+    \begin{tabular}{|c|l|c|c|}
+        \hline
+        \textbf{Sr. No.} & \textbf{Adder Type} & \textbf{Delay (ns)} & \textbf{Bit Width} \\ \hline
+        1 & Brent-Kung (This Project) & 3.78 & 32-bit \\ 
+        2 & Ripple Carry (RCA) & 38.66 & 32-bit \\ 
+        3 & Carry Look-Ahead (CLA) & 9.33 & 32-bit \\ 
+        4 & Kogge-Stone (KSA) & 6.7 & 16-bit \\ 
+        5 & Modified KSA & 3.5 & 32-bit \\ 
+        6 & Han-Carlson (HCA) & 3.129 & 16-bit \\ 
+        7 & Pass Transistor Full Adder & 7.04 & 32-bit \\ \hline
+    \end{tabular}
+    \caption{Adder Performance Comparison}
+    \label{tab:adder_performance}
+\end{table}
+
+
+
+
+% Second Table: Metadata 
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \resizebox{\columnwidth}{!}{
+        \begin{tabular}{|c|c|l|}
+            \hline
+            \textbf{Sr. No.} & \textbf{Technology Node} & \textbf{Source Citation} \\ \hline
+            1 & Not specified & Our Synthesis Report \\ 
+            2 & 180 nm & M. Y. Divya et al., "32-Bit Adders," VRSEC, India. \\ 
+            3 & 45 nm & L.G.R et al., "32-Bit CLA Adder," SIT, India. \\ 
+            4 & 90 nm & A. Chaturvedi et al., "Review on RCA and CLA." \\ 
+            5 & 45 nm & A. Chaturvedi et al., "Review on RCA and CLA." \\ 
+            6 & 65 nm & V. Sidharthan et al., "Parallel-Prefix Adder Analysis." \\ 
+            7 & 180 nm & V. Sidharthan et al., "Parallel-Prefix Adder Analysis." \\ 
+            \hline
+        \end{tabular}
+    }
+    \caption{Adder Metadata: Technology Node and Citations}
+    \label{tab:adder_metadata}
+\end{table}
+
+
+
+
+\section{Advantages and Disadvantages}
+\begin{itemize}
+    \item \textbf{Advantages:} Logarithmic depth, reduced fan-out, efficient for high-speed applications.
+    \item \textbf{Disadvantages:} More complex hardware compared to ripple-carry adders.
+\end{itemize}
+
+
+
+
+
+
+\section{Conclusion}
+The implementation and simulation of a 32-bit Brent-Kung adder demonstrate the effectiveness of parallel prefix adders in modern digital circuit design. This project successfully showcases the adder's ability to balance high-speed performance with reasonable hardware complexity, making it an excellent choice for various applications in digital systems.Key achievements include:
+\begin{enumerate}
+    \item Successful design and simulation of a 32-bit Brent-Kung adder using Verilog HDL.
+    \item Verification through comprehensive test cases.
+    \item Demonstration of correct functionality across various scenarios including overflow and carry-in conditions.
+\end{enumerate}
+
+Potential future work includes extending this design to higher bit-widths or exploring other fast-adder architectures such as Kogge-Stone, Han-Carlson, Sklansky, Wallace Tree, and Knowles adders.
+
+The Codes and Files shown in this project can be accessed on GitHub: \textbf{\textit{https://github.com/yashv373/32-Bit-Brent-Kung-Adder/tree/main}}
+
+
+\section{References}
+\begin{thebibliography}{10}
+
+\bibitem{Brent1982} R. P. Brent and H. T. Kung, "A regular layout for parallel adders," \textit{IEEE Transactions on Computers}, vol. C-31, no. 3, pp. 260-264, 1982.
+
+\bibitem{Testbook} Testbook, "Adders in Digital Electronics." [Online]. Available: \url{https://testbook.com/digital-electronics/adders}.
+
+\bibitem{Patil2018} R. R. Patil and M. B. Mulla, "Design and Implementation of Brent-Kung Adder," \textit{International Journal of Advance Research, Ideas and Innovations in Technology (IJARIIT)}, vol. 4, no. 3, pp. 1245-1250, 2018. [Online]. Available: \url{https://www.ijariit.com/manuscripts/v4i3/V4I3-1383.pdf}.
+
+\bibitem{KhanGitHub} F. Khan, "32-bit Brent-Kung Adder," GitHub Repository. [Online]. Available: \url{https://github.com/faizaan22/32-bit-Brent-Kung-Adder/blob/main/README.md}.
+
+\bibitem{Abidin2012} A. Z. Abidin, S. A. M. Al Junid, K. K. M. Sharif, Z. Othman, and M. A. Haron, "4-Bit Brent Kung Parallel Prefix Adder Simulation Study Using Silvaco EDA Tools," \textit{International Journal of Simulation: Systems, Science \& Technology (IJSSST)}, vol. 13, no. 3A, pp. 51-58, 2012.
+
+\bibitem{Rao2017} K. Srinivasa Rao and D. V. G. K. Reddy, "A Comparative Study of High-Speed Parallel Prefix Adders," \textit{International Journal of VLSI Design \& Communication Systems (IJVDCS)}, vol. 8, no. 5, pp. 103-112, 2017. [Online]. Available: \url{https://www.ijvdcs.org/uploads/423615IJVDCS11719-175.pdf}.
+
+\bibitem{Panda2017} P. K. Panda and S. Mahapatra, "Efficient Design of High-Speed Adders for Arithmetic Computations," \textit{Advanced Computing: An International Journal (ACST)}, vol. 10, no. 10, pp. 123-134, 2017. [Online]. Available: \url{https://www.ripublication.com/acst17/acstv10n1014.pdf}.
+
+\bibitem{ElHaroun2012} M. H. M. El-Haroun, "Design and Implementation of Low Power Brent-Kung Adder," \textit{Hindawi Journal of Electrical and Computer Engineering}, vol. 2012, Article ID 253742, 2012. [Online]. Available: \url{https://onlinelibrary.wiley.com/doi/10.5402/2012/253742}.
+
+\bibitem{Rahim2023} A. Rahim \textit{et al.}, "Optimized Design of Brent-Kung Adders for High-Performance Computing," \textit{Indonesian Journal of Electrical Engineering and Computer Science}, vol. 29, no. 3, pp. 1345-1354, Mar. 2023. DOI: 10.11591/ijeecs.v29.i3.pp1345-1354.
+
+\bibitem{Gundi2023} S. Gundi, "Implementation of 32-Bit Brent-Kung Adder Using GDI Technique," \textit{Semantic Scholar}. [Online]. Available: \url{https://www.semanticscholar.org/paper/Implementation-of-32-Bit-Brent-Kung-Adder-Using-Gundi/abbb8432b1cd28aee84eada6702536a3b3cf1305}.
+
+\end{thebibliography}
+
+\\
+\section*{Author Biography}
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{your_photo.jpg}}]{Yashvardhan Singh}
+was born in India in 2004. He is currently pursuing a B.Tech. degree in Electronics Engineering with a specialization in VLSI Design at Manipal Institute of Technology, Manipal, India.
+
+His research interests include spintronics, hybrid MTJ-CMOS architectures, ASIC design, computer architecture, and cryptographic hardware acceleration. 
+
+Currently, he is involved in research on CMOS-MTJ hybrid architectures for next-generation computing applications, including cryptography, blockchain, and cloud computing.
+\end{IEEEbiography}
+\begin{IEEEbiography}{Avyukth Dinesh}
+was born in India in 2005. He is currently pursuing a B.Tech. degree in Electronics Engineering with a specialization in VLSI Design at Manipal Institute of Technology, Manipal, India.
+
+\end{IEEEbiography}
+
+\end{document}
