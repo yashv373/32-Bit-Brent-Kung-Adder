@@ -15,7 +15,7 @@ This repository contains the implementation and analysis of a **32-bit Brent-Kun
 ## Project Files
 ## Performance Comparison
 
-| Adder Type | Delay (ns) | Bit Width | Technology Node | Reference |
+| Adder Type | Delay (ns) | Bit Width | Design Methodology | Reference |
 |----------------|------------|------------|-----------------|----------------|
 | **Brent Kung Adder (BKA)** | **3.780** | 32-bit | Semicustom | This Paper |
 | Ripple Carry Adder (RCA) | 57.897 | 32-bit | Semicustom | Chilaka & Kumar, JETIR, 2020 |
