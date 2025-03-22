@@ -13,18 +13,23 @@ This repository contains the implementation and analysis of a **32-bit Brent-Kun
 - **Synthesized using industry-standard tools**.
 
 ## Project Files
+## Performance Comparison
 
-| File Name                 | Description |
-|---------------------------|-------------|
-| `brentkung32.v`           | Verilog implementation of the 32-bit Brent-Kung Adder |
-| `brentkung32_tb.v`        | Testbench for functional verification |
-| `bka.tcl`                 | Tcl script for synthesis |
-| `bka_area.rep`            | Area report from synthesis |
-| `bka_pwr.rep`             | Power report from synthesis |
-| `bka_timing.rep`          | Timing analysis report |
-| `brentkung_synthesis.png` | Schematic representation of the synthesized design |
-| `bkanclaunch.png`         | Simulation setup screenshot |
-| `Brent Kung 32Bit Project Documentation.pdf` | Detailed project report |
+| Adder Type | Delay (ns) | Bit Width | Technology Node | Reference |
+|----------------|------------|------------|-----------------|----------------|
+| **Brent Kung Adder (BKA)** | **3.780** | 32-bit | Semicustom | This Paper |
+| Ripple Carry Adder (RCA) | 57.897 | 32-bit | Semicustom | Chilaka & Kumar, JETIR, 2020 |
+| Carry Increment Adder (CIA) | 26.57 | 32-bit | Semicustom | Yamini Divya and BKL Aruna, IJERT Oct 2020 |
+| Carry Look-Ahead Adder (CLA) | 44.897 | 32-bit | Semicustom | Chilaka & Kumar, JETIR, 2020 |
+| Ladner Fischer Adder (LFA) | 21.879 | 32-bit | Semicustom | P. Vara Lakshmi et al., IJARSE 2022 |
+| Kogge Stone Adder (KSA) | 21.326 | 32-bit | Semicustom | Chilaka & Kumar, JETIR, 2020 |
+| Carry Skip Adder (CSKA(FA)) | 25.514 | 32-bit | Semicustom | Yamini Divya and BKL Aruna, IJERT Oct 2020 |
+| Spanning Tree Adder (SPA) | 31.128 | 32-bit | Semicustom | Chilaka & Kumar, JETIR, 2020 |
+| Modified Manchester Carry Chain Adder (MMCCA) | 31.87 | 32-bit | Semicustom | Ravindran and Pradeep, Trends in Innovative Computing 2012 - Intelligent Systems Design |
+| Sparse Kogge Stone Adder (SKSA) | 19.895 | 32-bit | Semicustom | Navdeep Prashar, IJTRA 2015 |
+| Han Carlson Adder (HCA) | 0.225 | 32-bit | Semicustom | Sasireka S Marimuthu, CN IJEER December 2015 |
+
+
 
 ## Performance Comparison
 
