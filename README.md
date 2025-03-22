@@ -30,19 +30,6 @@ This repository contains the implementation and analysis of a Semicustom Fronten
 | Han Carlson Adder (HCA) | 0.225 | 32-bit | Semicustom | Sasireka S Marimuthu, CN IJEER December 2015 |
 
 
-
-## Performance Comparison
-
-| Adder Type      | Delay (ns) | Bit Width | Technology Node |
-|----------------|------------|------------|-----------------|
-| **Brent-Kung (This Project)** | **3.78**  | 32-bit  | Not specified |
-| Ripple Carry (RCA) | 38.66  | 32-bit  | 180nm |
-| Carry Look-Ahead (CLA) | 9.33  | 32-bit  | 45nm |
-| Kogge-Stone (KSA) | 6.7  | 16-bit  | 90nm |
-| Modified KSA | 3.5  | 32-bit  | 45nm |
-| Han-Carlson (HCA) | 3.129  | 16-bit  | 65nm |
-| Pass Transistor Full Adder | 7.04  | 32-bit  | 180nm |
-
 ## How to Run
 1. Clone the repository:
    ```sh
