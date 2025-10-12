@@ -1,5 +1,6 @@
 # Brent-Kung 32-Bit Adder
 Project by Yashvardhan Singh - 4th Semester Student - Electronics Engg. (VLSI Design & Technology) Undergraduate Student - Dept. of ECE, MIT, Manipal.
+link to paper: https://arxiv.org/abs/2503.18070
 ## Overview
 This repository contains the implementation and analysis of a Semicustom Frontend VLSI based **32-bit Brent-Kung Adder (BKA)**, a parallel-prefix adder architecture known for its efficiency in reducing delay while maintaining a balanced trade-off in power and area. The project includes **Verilog** implementations, testbenches, synthesis reports, and Tcl scripts for simulation and synthesis.
 
